@@ -79,7 +79,7 @@ def asteval_convert(fcn, handle=None):
         raise Exception('ERROR: input function is type %s'%str(type(fcn)).split(' ')[1].rsplit('>')[0])
     
     
-def lm_curve_fit(fit_func, x_data, y_data, p0, p_over=None, param_domain=None, p_exprs=None, fit_domain=None, verbose=False, plot_fit=False, full_output=False):
+def lm_curve_fit(fit_func, x_data, y_data, p0, p_over=None, param_domain=None, p_exprs=None, fit_domain=None, verbose=False, plot_fit=False, full_output=False, independent_vars=None):
     '''
     :param fit_func: Can be a user defined function, composite model, or a built in lm_fit fit function. For list of built-in models
     use get_lm_models().
@@ -118,7 +118,10 @@ def lm_curve_fit(fit_func, x_data, y_data, p0, p_over=None, param_domain=None, p
             fit_model=fit_func
             fcn_vars=fit_model.param_names
     elif inspect.isfunction(fit_func):
-        fit_model=Model(fit_func)
+        if independent_vars==None:
+            fit_model=Model(fit_func)
+        elif type(independent_vars)==list:
+            fit_model=Model(fit_func, independent_vars=independent_vars)
         fcn_vars=fit_model.param_names
     else:
         raise Exception('ERROR: fit function is %s, needs to be lm_fit model class or function.'%str(type(fit_func)).split(' ')[1].rsplit('>')[0])
@@ -260,8 +263,10 @@ def lm_curve_fit(fit_func, x_data, y_data, p0, p_over=None, param_domain=None, p
         #set constraining equations for appropriate variables
         for key in iter(const_eqn.keys()):
             params[key].set(expr=const_eqn[key])
-
-        result=fit_model.fit(y_data, params, x=x_data)
+        if independent_vars==None:
+            result=fit_model.fit(y_data, params, x=x_data)
+        elif type(independent_vars)==list:
+            result=fit_model.fit(y_data, params, **x_data)
 
         fit_params={}
         fit_err={}
@@ -381,8 +386,11 @@ def lm_curve_fit(fit_func, x_data, y_data, p0, p_over=None, param_domain=None, p
         #set constraining expressions
         for exprs, var in zip(const_eqn, fcn_vars):
             params[var].set(expr=exprs)
-            
-        result=fit_model.fit(y_data, params, x=x_data)
+        
+        if independent_vars==None:
+            result=fit_model.fit(y_data, params, x=x_data)
+        elif type(independent_vars)==list:
+            result=fit_model.fit(y_data, params, **x_data)
 
         fit_params=[]
         fit_err=[]

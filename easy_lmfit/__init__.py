@@ -21,10 +21,7 @@ except (ImportError, ModuleNotFoundError):
 
 import lmfit
 from lmfit import *
-from lmfit.models import (BreitWignerModel, ComplexConstantModel, ConstantModel, DampedHarmonicOscillatorModel, DampedOscillatorModel, DimensionalError,
-DonaichModel, DoniachModel, ExponentialGaussianModel, ExponentialModel, ExpressionModel, GaussianModel, Interpreter, LinearModel, LognormalModel,
-LorentzianModel, Model, MoffatModel, ParabolicModel, Pearson7Model, PolynomialModel, PowerLawModel, PseudoVoigtModel, QuadraticModel, RectangleModel,
-SkewedGaussianModel, SkewedVoigtModel, SplitLorentzianModel, StepModel, StudentsTModel,ThermalDistributionModel, VoigtModel)
+from lmfit.models import *
 from . import  easy_lmfit
 from .easy_lmfit import get_lm_models, get_model_params, lm_curve_fit
 
@@ -34,8 +31,6 @@ __all__=['easy_lmfit', 'get_lm_models', 'get_model_params', 'lm_curve_fit', 'Bre
 'DampedHarmonicOscillatorModel',
 'DampedOscillatorModel',
 'DimensionalError',
-'DonaichModel',
-'DoniachModel',
 'ExponentialGaussianModel',
 'ExponentialModel',
 'ExpressionModel',
